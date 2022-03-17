@@ -1,0 +1,24 @@
+body{
+    min-height: 630px;
+    background: linear-gradient(rgb(0, 17, 255),rgba(0, 4, 255, 0.5));
+    background-repeat: no-repeat;
+}
+.card{
+    background: linear-gradient(rgb(204, 201, 201),rgba(209, 205, 205, 0.63));
+    color: black;
+}
+#gameArea {
+    margin-top:100px;
+
+}
+#gameArea p{
+    text-align: center;
+}
+#gameArea input{
+    display: none;
+    margin-top: 20px;
+}
+#gameArea button{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
