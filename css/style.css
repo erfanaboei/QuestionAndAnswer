@@ -6,6 +6,8 @@ body{
 .card{
     background: linear-gradient(rgb(204, 201, 201),rgba(209, 205, 205, 0.63));
     color: black;
+    max-width: 500px;
+    margin-right: 300px;
 }
 #gameArea {
     margin-top:100px;
@@ -14,8 +16,8 @@ body{
 #gameArea p{
     text-align: center;
 }
-#gameArea input{
-    display: none;
+#gameArea #answerBox{
+    /* display: none; */
     margin-top: 20px;
 }
 #gameArea button{

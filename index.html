@@ -6,9 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question & Answer</title>
-    <link href="./css/bootstrap.rtl.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/materialdesignicons.min.css">
-    <link href="./css/style.css" rel="stylesheet" />
+    <link href="/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/materialdesignicons.min.css">
+    <link href="/css/style.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -19,16 +19,18 @@
                     <p id="questionBox">محل قرارگیری سوال </p>
                 </div>
                 <div class="card-body">
-                    <input type="text" id="textBoxAnswer" class="form-control" placeholder="لطفا پاسخ خود را وارد کنید">
+                    <div id="answerBox">
+                    </div>
                     <button class="btn btn-success form-control">شروع</button>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer d-flex justify-content-between">
+                    <p id="scoreBox"></p>
                     <div id="timeBox" class="d-flex justify-content-center">
                         <p id="second">00</p>
                         <p>:</p>
                         <p id="minute">00</p>
                     </div>
-                    <p id="scoreBox">محل قرارگیری امتیاز</p>
+                    <p id="questionNumber"></p>
                 </div>
             </div>
         </main>
@@ -36,81 +38,99 @@
     <script>
 
     </script>
-    <script src="./js/bootstrap.bundle.min.js"></script>
-    <script src="./js/site.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
 
 
     <script>
-        const questionBox = document.getElementById('questionBox');
-        const answerBox = document.getElementById('textBoxAnswer');
-        const button = document.querySelector('button');
-        const time = document.getElementById('timeBox');
-        const questionArray = ["استقلال چندبار قهرمان آسیا شده است؟",
-            "چه کسی بیشترین گل زده در طول تاریخ فوتبال را  دارد؟",
-            "مسی چند توپ طلا دارد؟",
-            "چه کسی بیشترین توپ طلا را دریافت کرده است؟",
-            "چه تیمی بیشترین قهرمانی آسیا را دارد؟",
-            "چه تیمی بیشترین قهرمانی اروپا را دارد؟",
-            "الکلاسیکو بین چه تیم هایی است؟",
-            "فوتبال توسط چه کشوری اختراع شد؟",
-            "آقای گلی ملی جهان کیست؟",
-            "گل ایران به پرتغال را چه کسی زد؟",
-            "گل آرژانتین به ایران در جام جهانی 2014 توسط چه کسی زده شد؟",
-            "رونالدو در سال 2019 در چه تیمی بازی میکرد؟",
-            "مسی در چه سالی از بارسلونا جدا شد؟"];
-        const answerArray = ["2",
-            "کریستیانو رونالدو",
-            "7",
-            "مسی",
-            "الهلال",
-            "رئال مادرید",
-            "رئال مادرید و باسلونا",
-            "انگلیس",
-            "کریستیانو رونالدو",
-            "کریم انصاری فرد",
-            "مسی",
-            "یوونتوس",
-            "2021"];
-        var score = 0;
-        var x = 0;
-        var clickCount = 0;
-        button.addEventListener('click', startGame);
+        fetch("/data.json").then(response => response.json()).then(json => {
+            const questionBox = document.getElementById('questionBox');
+            const answerBox = document.getElementById('answerBox');
+            const button = document.querySelector('button');
+            const time = document.getElementById('timeBox');
+            const questionNumber = document.getElementById('questionNumber');
+            var score = 0;
+            var x = 1;
+            var clickCount = 0;
+            button.addEventListener('click', playGame);
+            function playGame() {
+                button.innerHTML = "ثبت پاسخ";
+                // answerBox.style.display = "block";
+                // for(y=0;y<json.length;y++){
 
-        function startGame() {
-            button.innerHTML = "ثبت پاسخ";
-            answerBox.style.display = "block";
-            var randomQuestion = Math.floor(Math.random() * questionArray.length);
-            questionBox.innerHTML = questionArray[randomQuestion];
-            if (clickCount < 1) {
-                var intervall = setInterval(timer, 1000);
-            }
-            clickCount++;
-        }
+                // }
+                if (x <= 20) {
+                    questionNumber.innerHTML = x + "/20";
+                    x++;
+                    answerBox.innerHTML = "";
+                    var randomQuestion = Math.floor(Math.random() * json.length);
+                    questionBox.innerHTML = json[randomQuestion].question;
+                    for (var i = 0; i < 4; i++) {
+                        var output = '<input type="radio" name="Answer">';
+                        output += json[randomQuestion].Answers[i];
+                        output += '</input>'
+                        output += "</br>";
+                        answerBox.innerHTML += output;
+                    }
+                    var answerRadio;
+                    // button.addEventListener('click', function () {
+                    //     debugger;
+                    //     answerRadio = document.querySelector('[name=Answer]:checked');
+                    //     console.log(answerRadio.nextSibling);
+                    //     if (answerRadio.nextSibling.data == json[randomQuestion].trueAnswer) {
+                    //         alert("1");
+                    //     } else {
+                    //         alert("2");
+                    //     }
+                    //     var pop = json.splice(randomQuestion, 1);
+                    // });
+                    setTimeout(function checkAnswer() {
+                        debugger;
+                        answerRadio = document.querySelector('[name=Answer]:checked');
+                        console.log(answerRadio.nextSibling);
+                        if (answerRadio.nextSibling.data == json[randomQuestion].trueAnswer) {
+                            alert("1");
+                        } else {
+                            alert("2");
+                        }
+                        var pop = json.splice(randomQuestion, 1);
+                    }, 5000);
 
-        function timer() {
-            var minute = document.getElementById('minute').innerText;
-            var second = document.getElementById('second').innerText;
-            var timeBox = document.getElementById('timeBox');
-            if (parseInt(second) >= 1) {
-                timeBox.style.color = "red";
-                clearInterval(intervall);
-
-            }
-            if (parseInt(second) === 59) {
-                var newMin = (parseInt(minute) + 1).toString();
-                if (newMin < 10) {
-                    newMin = "0" + newMin;
                 }
-                document.getElementById('minute').innerHTML = newMin
-                document.getElementById('second').innerHTML = "00";
-            } else {
-                var newSec = (parseInt(second) + 1).toString();
-                if (newSec < 10) {
-                    newSec = "0" + newSec;
+
+                if (clickCount < 1) {
+                    var intervall = setInterval(timer, 1000);
                 }
-                document.getElementById('second').innerHTML = newSec;
+                setTimeout(playGame, 60000);
+                clickCount++;
+
             }
-        }
+
+            function timer() {
+
+                var minute = document.getElementById('minute').innerText;
+                var second = document.getElementById('second').innerText;
+                var timeBox = document.getElementById('timeBox');
+                if (parseInt(minute) >= 1) {
+                    timeBox.style.color = "red";
+                    clearInterval(intervall);
+                }
+                if (parseInt(second) === 59) {
+                    var newMin = (parseInt(minute) + 1).toString();
+                    if (newMin < 10) {
+                        newMin = "0" + newMin;
+                    }
+                    document.getElementById('minute').innerHTML = newMin
+                    document.getElementById('second').innerHTML = "00";
+                } else {
+                    var newSec = (parseInt(second) + 1).toString();
+                    if (newSec < 10) {
+                        newSec = "0" + newSec;
+                    }
+                    document.getElementById('second').innerHTML = newSec;
+                }
+            }
+
+        });
     </script>
 </body>
 
