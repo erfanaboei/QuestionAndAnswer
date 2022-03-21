@@ -24,3 +24,22 @@ body{
     margin-top: 20px;
     margin-bottom: 20px;
 }
+#scoreBox{
+    display: none;
+    margin-top: 5px;
+    max-width: 500px;
+    background: linear-gradient(rgb(204, 201, 201),rgba(209, 205, 205, 0.63));
+    margin-right: 300px;
+    border-radius: 5px;
+    text-align: center;
+    padding: 10px;
+}
+#notAnswered{
+    color: blue;
+}
+#answerTrue{
+    color: green;
+}
+#answerFalse{
+    color: red;
+}

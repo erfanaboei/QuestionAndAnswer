@@ -24,7 +24,6 @@
                     <button class="btn btn-success form-control">شروع</button>
                 </div>
                 <div class="card-footer d-flex justify-content-between">
-                    <p id="scoreBox"></p>
                     <div id="timeBox" class="d-flex justify-content-center">
                         <p id="second">00</p>
                         <p>:</p>
@@ -32,6 +31,11 @@
                     </div>
                     <p id="questionNumber"></p>
                 </div>
+            </div>
+            <div id="scoreBox">
+                <p id="notAnswered"></p>
+                <p id="answerTrue"></p>
+                <p id="answerFalse"></p>
             </div>
         </main>
     </div>
@@ -48,16 +52,25 @@
             const button = document.querySelector('button');
             const time = document.getElementById('timeBox');
             const questionNumber = document.getElementById('questionNumber');
+            const scoreBox = document.getElementById('scoreBox');
+            const scoreBoxNot = document.getElementById('notAnswered');
+            const scoreBoxTrue = document.getElementById('answerTrue');
+            const scoreBoxFlase = document.getElementById('answerFalse');
+            var intervall;
+            var small;
+            var answerFalse = 0;
+            var answerTrue = 0;
+            var notAnswered = 0;
             var score = 0;
             var x = 1;
             var clickCount = 0;
             button.addEventListener('click', playGame);
+            // scoreBoxNot.innerHTML = " سوالاتی که پاسخ نداده اید :" + notAnswered + "<br>";
+            // scoreBoxTrue.innerHTML += " سوالاتی که صحیح پاسخ داده اید : " + answerTrue + "<br>";
+            // scoreBoxFlase.innerHTML += " سوالاتی که اشتباه پاسخ داده اید : " + answerFalse;
             function playGame() {
+                questionBox.style.color = "";
                 button.innerHTML = "ثبت پاسخ";
-                // answerBox.style.display = "block";
-                // for(y=0;y<json.length;y++){
-
-                // }
                 if (x <= 20) {
                     questionNumber.innerHTML = x + "/20";
                     x++;
@@ -65,44 +78,83 @@
                     var randomQuestion = Math.floor(Math.random() * json.length);
                     questionBox.innerHTML = json[randomQuestion].question;
                     for (var i = 0; i < 4; i++) {
-                        var output = '<input type="radio" name="Answer">';
+                        var output = '<input type="radio" name="Answer" value="';
                         output += json[randomQuestion].Answers[i];
-                        output += '</input>'
+                        output += '"/>'
+                        output += "<small>" + json[randomQuestion].Answers[i] + "</small>";
                         output += "</br>";
                         answerBox.innerHTML += output;
                     }
                     var answerRadio;
-                    // button.addEventListener('click', function () {
-                    //     debugger;
-                    //     answerRadio = document.querySelector('[name=Answer]:checked');
-                    //     console.log(answerRadio.nextSibling);
-                    //     if (answerRadio.nextSibling.data == json[randomQuestion].trueAnswer) {
-                    //         alert("1");
-                    //     } else {
-                    //         alert("2");
-                    //     }
-                    //     var pop = json.splice(randomQuestion, 1);
-                    // });
-                    setTimeout(function checkAnswer() {
-                        debugger;
+                    button.onclick = function () {
                         answerRadio = document.querySelector('[name=Answer]:checked');
-                        console.log(answerRadio.nextSibling);
-                        if (answerRadio.nextSibling.data == json[randomQuestion].trueAnswer) {
+                        if (answerRadio === null) {
+                            alert("0");
+
+                        }
+                        else if (answerRadio.nextSibling.data == json[randomQuestion].trueAnswer) {
                             alert("1");
+
                         } else {
                             alert("2");
                         }
-                        var pop = json.splice(randomQuestion, 1);
-                    }, 5000);
+                        json.splice(randomQuestion, 1);
+                    };
 
+                    var timeout = setTimeout(function checkAnswer() {
+                        answerRadio = document.querySelector('[name=Answer]:checked');
+                        if (answerRadio === null) {
+                            questionBox.style.color = "blue";
+                            notAnswered++;
+                            small = document.querySelectorAll('small');
+                            for (p = 0; p < small.length; p++) {
+                                if (small[p].innerHTML == json[randomQuestion].trueAnswer) {
+                                    small[p].style.color = "green"
+                                } else {
+                                    small[p].style.color = "red"
+                                }
+                            }
+                            setTimeout(playGame, 2000);
+                        }
+                        else if (answerRadio.value == json[randomQuestion].trueAnswer) {
+                            questionBox.style.color = "green";
+                            answerTrue++;
+                            score++;
+                            small = document.querySelectorAll('small');
+                            for (p = 0; p < small.length; p++) {
+                                if (small[p].innerHTML == json[randomQuestion].trueAnswer) {
+                                    small[p].style.color = "green"
+                                }
+                            }
+                            setTimeout(playGame, 2000);
+                        } else {
+                            questionBox.style.color = "red";
+                            answerFalse++;
+                            small = document.querySelectorAll('small');
+                            for (p = 0; p < small.length; p++) {
+                                if (small[p].innerHTML == json[randomQuestion].trueAnswer) {
+                                    small[p].style.color = "green"
+                                } else {
+                                    small[p].style.color = "red"
+                                }
+                            }
+                            setTimeout(playGame, 1000);
+                        }
+                        json.splice(randomQuestion, 1);
+                    }, 2000);
+
+                } else {
+                    scoreBox.style.display = "block";
+                    scoreBoxNot.innerHTML = " سوالاتی که پاسخ نداده اید :" + notAnswered + "<br>";
+                    scoreBoxTrue.innerHTML += " سوالاتی که صحیح پاسخ داده اید : " + answerTrue + "<br>";
+                    scoreBoxFlase.innerHTML += " سوالاتی که اشتباه پاسخ داده اید : " + answerFalse;
+                    clearTimeout(timeout);
+                    clearInterval(intervall);
                 }
-
                 if (clickCount < 1) {
-                    var intervall = setInterval(timer, 1000);
+                    intervall = setInterval(timer, 1000);
                 }
-                setTimeout(playGame, 60000);
                 clickCount++;
-
             }
 
             function timer() {
@@ -110,7 +162,7 @@
                 var minute = document.getElementById('minute').innerText;
                 var second = document.getElementById('second').innerText;
                 var timeBox = document.getElementById('timeBox');
-                if (parseInt(minute) >= 1) {
+                if (parseInt(minute) >= 20) {
                     timeBox.style.color = "red";
                     clearInterval(intervall);
                 }
