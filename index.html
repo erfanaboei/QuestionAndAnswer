@@ -88,25 +88,25 @@
                     answerBox.innerHTML += output;
                 }
             }
-            function notAnsweredUser() {
-                timeout = setTimeout(function () {
-                    answerRadio = document.querySelector('[name=Answer]:checked');
-                    if (answerRadio === null) {
-                        questionBox.style.color = "blue";
-                        notAnswered++;
-                        small = document.querySelectorAll('small');
-                        for (p = 0; p < small.length; p++) {
-                            if (small[p].innerHTML == json[randomQuestion].trueAnswer) {
-                                small[p].style.color = "green"
-                            } else {
-                                small[p].style.color = "red"
-                            }
-                        }
-                        setTimeout(playGame, 1000);
-                    }
-                    json.splice(randomQuestion, 1);
-                }, 2000);
-            }
+            // function notAnsweredUser() {
+            //     timeout = setTimeout(function () {
+            //         answerRadio = document.querySelector('[name=Answer]:checked');
+            //         if (answerRadio === null) {
+            //             questionBox.style.color = "blue";
+            //             notAnswered++;
+            //             small = document.querySelectorAll('small');
+            //             for (p = 0; p < small.length; p++) {
+            //                 if (small[p].innerHTML == json[randomQuestion].trueAnswer) {
+            //                     small[p].style.color = "green"
+            //                 } else {
+            //                     small[p].style.color = "red"
+            //                 }
+            //             }
+            //             setTimeout(playGame, 1000);
+            //         }
+            //         json.splice(randomQuestion, 1);
+            //     }, 2000);
+            // }
             function checkAnswer() {
                 answerRadio = document.querySelector('[name=Answer]:checked');
                 if (answerRadio === null) {
@@ -120,6 +120,7 @@
                             small[p].style.color = "red"
                         }
                     }
+                    setTimeout(playGame, 1000);
                 }
                 else if (answerRadio.value == json[randomQuestion].trueAnswer) {
                     questionBox.style.color = "green";
@@ -131,6 +132,7 @@
                             small[p].style.color = "green"
                         }
                     }
+                    setTimeout(playGame, 1000);
                 } else {
                     questionBox.style.color = "red";
                     answerFalse++;
@@ -142,6 +144,7 @@
                             small[p].style.color = "red"
                         }
                     }
+                    setTimeout(playGame, 1000);
                 }
                 json.splice(randomQuestion, 1);
             }
@@ -150,12 +153,12 @@
                 questionBox.style.color = "";
                 button.innerHTML = "ثبت پاسخ";
                 answerBox.innerHTML = "";
+                setTimeout(checkAnswer, 2000);
                 if (x <= 20) {
                     questionBox.style.display = "block";
                     questionNumber.innerHTML = x + "/20";
                     x++;
                     createQuestion();
-                    notAnsweredUser();
                 } else {
                     clearTimeout(timeout);
                     clearInterval(intervall);
@@ -184,7 +187,6 @@
 
 
             function timer() {
-
                 var minute = document.getElementById('minute').innerText;
                 var second = document.getElementById('second').innerText;
                 var timeBox = document.getElementById('timeBox');
