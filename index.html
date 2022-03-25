@@ -22,7 +22,8 @@
                             <p id="icon" class="text-center"><i class="mdi mdi-emoticon-wink-outline mdi-36px"></i></p>
                         </div>
                         <div class="card-body">
-                            <div id="answerBox">
+                            <div class="row" id="answerBox">
+
                             </div>
                             <button class="btn btn-success form-control">شروع</button>
                         </div>
@@ -80,11 +81,13 @@
                 randomQuestion = Math.floor(Math.random() * json.length);
                 questionBox.innerHTML = json[randomQuestion].question;
                 for (var i = 0; i < 4; i++) {
-                    var output = '<input type="radio" name="Answer" value="';
+                    var output = "<div class='col-6 radioAnswer'>";
+                    output += '<input type="radio" name="Answer" value="';
                     output += json[randomQuestion].Answers[i];
                     output += '"/>'
                     output += "<small>" + json[randomQuestion].Answers[i] + "</small>";
-                    output += "</br>";
+                    output += "</div>";
+                    // output += "</br>";
                     answerBox.innerHTML += output;
                 }
             }
@@ -109,15 +112,21 @@
             // }
             function checkAnswer() {
                 answerRadio = document.querySelector('[name=Answer]:checked');
+                var radioAnswer = document.querySelectorAll('.radioAnswer')
                 if (answerRadio === null) {
                     questionBox.style.color = "blue";
                     notAnswered++;
                     small = document.querySelectorAll('small');
                     for (p = 0; p < small.length; p++) {
                         if (small[p].innerHTML == json[randomQuestion].trueAnswer) {
-                            small[p].style.color = "green"
+                            // small[p].style.color = "green"
+                            radioAnswer[p].style.backgroundColor = "green";
+                            radioAnswer[p].style.color = "white";
+
                         } else {
-                            small[p].style.color = "red"
+                            radioAnswer[p].style.backgroundColor = "red";
+                            radioAnswer[p].style.color = "white";
+
                         }
                     }
                     setTimeout(playGame, 1000);
@@ -129,7 +138,8 @@
                     small = document.querySelectorAll('small');
                     for (p = 0; p < small.length; p++) {
                         if (small[p].innerHTML == json[randomQuestion].trueAnswer) {
-                            small[p].style.color = "green"
+                            radioAnswer[p].style.backgroundColor = "green";
+                            radioAnswer[p].style.color = "white";
                         }
                     }
                     setTimeout(playGame, 1000);
@@ -139,9 +149,11 @@
                     small = document.querySelectorAll('small');
                     for (p = 0; p < small.length; p++) {
                         if (small[p].innerHTML == json[randomQuestion].trueAnswer) {
-                            small[p].style.color = "green"
+                            radioAnswer[p].style.backgroundColor = "green";
+                            radioAnswer[p].style.color = "white";
                         } else {
-                            small[p].style.color = "red"
+                            radioAnswer[p].style.backgroundColor = "red";
+                            radioAnswer[p].style.color = "white";
                         }
                     }
                     setTimeout(playGame, 1000);

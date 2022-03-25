@@ -53,3 +53,8 @@ body{
 #answerFalse{
     color: red;
 }
+.radioAnswer{
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
