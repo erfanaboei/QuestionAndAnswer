@@ -76,6 +76,7 @@
             var randomQuestion;
             var answerRadio;
             var timeout;
+            var check;
             button.addEventListener('click', playGame);
             function createQuestion() {
                 randomQuestion = Math.floor(Math.random() * json.length);
@@ -130,6 +131,8 @@
                         }
                     }
                     setTimeout(playGame, 1000);
+                    clearTimeout(check);
+
                 }
                 else if (answerRadio.value == json[randomQuestion].trueAnswer) {
                     questionBox.style.color = "green";
@@ -143,6 +146,8 @@
                         }
                     }
                     setTimeout(playGame, 1000);
+                    clearTimeout(check);
+
                 } else {
                     questionBox.style.color = "red";
                     answerFalse++;
@@ -157,20 +162,25 @@
                         }
                     }
                     setTimeout(playGame, 1000);
+                    clearTimeout(check);
+
                 }
                 json.splice(randomQuestion, 1);
             }
             function playGame() {
                 icon.style.display = "none";
+                button.removeEventListener('click', playGame);
+
                 questionBox.style.color = "";
                 button.innerHTML = "ثبت پاسخ";
                 answerBox.innerHTML = "";
-                var check = setTimeout(checkAnswer, 2000);
+                check = setTimeout(checkAnswer, 5000);
                 if (x <= 20) {
                     questionBox.style.display = "block";
                     questionNumber.innerHTML = x + "/20";
                     x++;
                     createQuestion();
+                    button.addEventListener('click', checkAnswer);
                 } else {
                     clearTimeout(timeout);
                     clearInterval(intervall);
@@ -203,7 +213,7 @@
                 var minute = document.getElementById('minute').innerText;
                 var second = document.getElementById('second').innerText;
                 var timeBox = document.getElementById('timeBox');
-                if (parseInt(minute) >= 20) {
+                if (parseInt(minute) >= 5) {
                     timeBox.style.color = "red";
                     clearInterval(intervall);
                 }
